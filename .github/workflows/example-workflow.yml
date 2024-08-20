@@ -1,18 +1,80 @@
 name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+
 on: [push]
+
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
+
     steps:
+      # Print out basic information about the workflow and environment
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+
+      # Check out the repository code
       - name: Check out repository code
         uses: actions/checkout@v4
+
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
+
+      # List files in the repository
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
+
+      # Check current system environment variables
+      - name: Print environment variables
+        run: |
+          printenv
+
+      # Use a matrix strategy to run tests across multiple versions of Node.js
+      - name: Test across multiple Node.js versions
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14' # Change this to the Node.js versions you want to test
+        run: |
+          node -v
+          npm install
+          npm test
+
+      # Use GitHub Actions cache to speed up dependency installation
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.npm
+            ~/.cache
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # Print the contents of a specific file
+      - name: Print contents of a file
+        run: |
+          cat path/to/your/file.txt # Replace with the path to a file in your repository
+
+      # Set and use a custom environment variable
+      - name: Set and use a custom environment variable
+        run: |
+          echo "CUSTOM_VAR=Hello, GitHub Actions!" >> $GITHUB_ENV
+          echo "📦 Custom environment variable: $CUSTOM_VAR"
+
+      # Run a script from the repository
+      - name: Run a custom script
+        run: |
+          chmod +x path/to/your/script.sh # Make sure the script has execution permissions
+          ./path/to/your/script.sh
+
+      # Demonstrate conditional execution
+      - name: Conditional Step
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: echo "This step only runs on the main branch."
+
+      # Fail the job intentionally to see how failure is handled
+      - name: Fail the job intentionally
+        run: exit 1
+
+      # Print job status
       - run: echo "🍏 This job's status is ${{ job.status }}."
