@@ -53,11 +53,3 @@ jobs:
           echo "🍎 The current job status is ${{ job.status }}."
           echo "🔍 The current step status is ${{ steps.step-id.outcome }}."
         id: step-status
-
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: demo-artifacts
-          path: |
-            ${{ github.workspace }}/README.md
-            ${{ github.workspace }}/script-output.txt
