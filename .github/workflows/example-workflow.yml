@@ -15,6 +15,10 @@ on:
 jobs:
   demonstrate-basics:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10']
+        os: [ubuntu-latest, macos-latest]
     steps:
       - name: Print Basic Info
         run: |
@@ -27,7 +31,6 @@ jobs:
           echo "🔗 Repository: ${{ github.repository }}."
           echo "🌳 Ref: ${{ github.ref }}."
           echo "📊 Event Path: ${{ github.event_path }}."
-
       - name: Check out Repository
         uses: actions/checkout@v4
         with:
@@ -43,7 +46,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: ${{ matrix.python-version }}
         id: python-setup
 
       - name: Run Python Script
@@ -54,13 +57,5 @@ jobs:
       - name: Display Job Status
         run: |
           echo "🍎 The current job status is ${{ job.status }}."
-          echo "🔍 The current step status is ${{ steps.step-id.outcome }}."
+          echo "🔍 The current step status is ${{ steps.step-status.outcome }}."
         id: step-status
-
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: demo-artifacts
-          path: |
-            ${{ github.workspace }}/README.md
-            ${{ github.workspace }}/script-output.txt
