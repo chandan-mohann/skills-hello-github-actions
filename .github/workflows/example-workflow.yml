@@ -5,11 +5,9 @@ on: [push]
 jobs:
   create-artifact:
     runs-on: ubuntu-latest
-    outputs:
-      artifact-path: ${{ steps.upload-artifact.outputs.artifact-path }}
     steps:
       - name: Generate file with name
-        run: echo "Chandan Mohan" > name.txt
+        run: echo "John Doe" > name.txt
       - name: Upload artifact
         id: upload-artifact
         uses: actions/upload-artifact@v3
