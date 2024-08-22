@@ -1,4 +1,4 @@
-name: Example Workflow
+name: Pass Name Variable
 
 on: [push]
 
@@ -6,15 +6,15 @@ jobs:
   job1:
     runs-on: ubuntu-latest
     outputs:
-      my_variable: ${{ steps.step1.outputs.my_variable }}
+      name: ${{ steps.step1.outputs.name }}
     steps:
-      - name: Set output variable
+      - name: Set name variable
         id: step1
-        run: echo "::set-output name=my_variable::$(date +%Y-%m-%d)"
+        run: echo "::set-output name=name::Chandan Mohan"
 
   job2:
     needs: job1
     runs-on: ubuntu-latest
     steps:
-      - name: Use output variable from job1
-        run: echo "The variable from job1 is ${{ needs.job1.outputs.my_variable }}"
+      - name: Display name from job1
+        run: echo "The name from job1 is ${{ needs.job1.outputs.name }}"
