@@ -16,5 +16,10 @@ jobs:
           name: name-artifact
       - name: Read name from artifact
         run: |
-          NAME=$(cat name.txt)
-          echo "The name from the artifact is $NAME"
+          if [ -f name.txt ]; then
+            NAME=$(cat name.txt)
+            echo "The name from the artifact is $NAME"
+          else
+            echo "Artifact file not found."
+            exit 1
+          fi
