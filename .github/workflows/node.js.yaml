@@ -10,7 +10,6 @@ jobs:
     - uses: actions/checkout@v3
     - name: Use Node.js
       uses: actions/setup-node@v3
-    - run: npm run build --if-present
     - run: echo "John Doe" > name.txt
     - uses: actions/upload-artifact@v3
       with:
