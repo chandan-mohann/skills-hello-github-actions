@@ -1,61 +1,18 @@
-name: GitHub Actions Basics Demonstration
+name: Generate Name Artifact
 
-# This workflow is triggered by various events for demonstration purposes
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-  issues:
-    types: [opened, edited]
-  workflow_dispatch: # Allows manual triggering of the workflow
+on: [push]
 
 jobs:
-  demonstrate-basics:
+  create-artifact:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ['3.8', '3.9', '3.10']
-        os: [ubuntu-latest, macos-latest]
+    outputs:
+      artifact-path: ${{ steps.upload-artifact.outputs.artifact-path }}
     steps:
-      - name: Print Basic Info
-        run: |
-          echo "🚀 The workflow was triggered by a ${{ github.event_name }} event."
-          echo "🌿 The event's action type is ${{ github.event.action }}."
-          echo "🔄 Workflow run ID: ${{ github.run_id }}."
-          echo "📅 Workflow run number: ${{ github.run_number }}."
-          echo "🔢 Workflow run attempt: ${{ github.run_attempt }}."
-          echo "👤 Actor: ${{ github.actor }}."
-          echo "🔗 Repository: ${{ github.repository }}."
-          echo "🌳 Ref: ${{ github.ref }}."
-          echo "📊 Event Path: ${{ github.event_path }}."
-      - name: Check out Repository
-        uses: actions/checkout@v4
+      - name: Generate file with name
+        run: echo "Chandan Mohan" > name.txt
+      - name: Upload artifact
+        id: upload-artifact
+        uses: actions/upload-artifact@v3
         with:
-          fetch-depth: 1 # Fetches only the latest commit
-
-      - name: Display Repository Information
-        run: |
-          echo "📁 Listing files in the repository directory:"
-          ls -al ${{ github.workspace }}
-          echo "📜 Contents of the README file:"
-          cat ${{ github.workspace }}/README.md || echo "No README.md file found."
-
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-        id: python-setup
-
-      - name: Run Python Script
-        run: |
-          python -c "print('Hello, GitHub Actions!')"
-          python --version
-
-      - name: Display Job Status
-        run: |
-          echo "🍎 The current job status is ${{ job.status }}."
-          echo "🔍 The current step status is ${{ steps.step-status.outcome }}."
-        id: step-status
+          name: name-artifact
+          path: name.txt
