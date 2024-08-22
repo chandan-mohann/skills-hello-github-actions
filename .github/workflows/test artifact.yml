@@ -1,0 +1,20 @@
+name: Use Name Artifact
+
+on:
+  workflow_run:
+    workflows: ["Generate Name Artifact"]
+    types:
+      - completed
+
+jobs:
+  use-artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: name-artifact
+      - name: Read name from artifact
+        run: |
+          NAME=$(cat name.txt)
+          echo "The name from the artifact is $NAME"
