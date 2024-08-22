@@ -5,36 +5,33 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-    - run: echo "John Doe" > name.txt
-    - uses: actions/upload-artifact@v3
-      with:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+      - run: echo "John Doe" > name.txt
+      - uses: actions/upload-artifact@v3
+        with:
           name: name-artifact
           path: name.txt
-  release:
-      runs-on: ubuntu-latest
-      permissions:
-        contents: write
-        
-      needs: build
 
-      steps: 
-        - uses: actions/download-artifact@v3
-          with:
-             name: name-artifact
-             path: name.txt
-        - name: List files
-          run: ls -l
-        - name: Read name from artifact
-          run: |
-            if [ -f name.txt ]; then
-              NAME=$(cat name.txt)
-              echo "The name from the artifact is $NAME"
-            else
-              echo "Artifact file not found."
-              exit 1
-            fi
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    needs: build
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: name-artifact
+      - name: List files
+        run: ls -l
+      - name: Read name from artifact
+        run: |
+          if [ -f name.txt ]; then
+            NAME=$(cat name.txt)
+            echo "The name from the artifact is $NAME"
+          else
+            echo "Artifact file not found."
+            exit 1
+          fi
