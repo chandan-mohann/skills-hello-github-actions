@@ -14,7 +14,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: name-artifact
-          path: name.txt
       - name: List files
         run: ls -l
       - name: Read name from artifact
