@@ -1,9 +1,6 @@
 name: Node.js CI
 
-on:
-  push:
-    tags:        # Remove the `branches` node and add this one
-      - '*'
+on: [push]
 
 jobs:
   build:
