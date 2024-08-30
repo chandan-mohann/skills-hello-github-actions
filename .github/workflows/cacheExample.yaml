@@ -1,6 +1,12 @@
-name: Node.js CI chace example
+name: Basic CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - main  # or the branch you want to trigger the workflow on
+  pull_request:
+    branches:
+      - main  # or the branch you want to trigger the workflow on
 
 jobs:
   build:
@@ -10,19 +16,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Cache Node.js modules
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.npm
-            # If you use yarn, uncomment the following line:
-            # ~/.cache/yarn
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      - name: Display message
+        run: echo "Hello, GitHub Actions!"
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run tests
-        run: npm test
+      - name: List directory contents
+        run: ls -la
